@@ -34,6 +34,56 @@ namespace po
 			}
 		}
 
+        
+        //
+        //    Public method;
+        //    Returns last reported voltage ratio value from channel
+        //
+        double VoltageRatioInput::getVoltageRatio()
+        {
+            if( mHandle == NULL ) {
+                CI_LOG_W( "VoltageRatioInput handle does not exist" );
+                return 0.0;
+            }
+            
+            PhidgetReturnCode prc;
+            double voltageRatio;
+            prc = PhidgetVoltageRatioInput_getVoltageRatio( mHandle, &voltageRatio );
+            
+            if( EPHIDGET_OK != prc ) {
+                CI_LOG_E( "Runtime Error -> Creating VoltageRatioInput:" );
+                displayError( prc );
+                return 1;
+            }
+            
+            return voltageRatio;
+        }
+        
+        //
+        //  Public method;
+        //  Returns last reported sensor value appropriate for the sensor
+        //
+        double VoltageRatioInput::getSensorValue() {
+            CI_LOG_V("placeholder");
+            if( mHandle == NULL ) {
+                CI_LOG_W( "VoltageRatioInput handle does not exist" );
+                return 0.0;
+            }
+            
+            PhidgetReturnCode prc;
+            double sensorValue;
+            prc = PhidgetVoltageRatioInput_getSensorValue( mHandle, &sensorValue );
+            
+            if( EPHIDGET_OK != prc ) {
+                CI_LOG_E( "Runtime Error -> Getting sensor value:" );
+                displayError( prc );
+                return 1;
+            }
+            
+            return sensorValue;
+        }
+        
+        
 		//
 		//	Called by base function;
 		//	creates voltage ratio input
@@ -48,6 +98,26 @@ namespace po
 				return 0;
 			}
 		}
+
+        /**
+         * Creates a new instance of a VoltageRatioInput channel.
+         *
+         * @param pvrih Pointer to the PhidgetVoltageRatioInputHandle channel to create
+         * @return 0 if the operation succeeds, 1 if it fails
+         */
+        int VoltageRatioInput::createVoltageRatioInput( PhidgetVoltageRatioInputHandle* pvrih )
+        {
+            PhidgetReturnCode prc;
+            prc = PhidgetVoltageRatioInput_create( pvrih );
+            
+            if( EPHIDGET_OK != prc ) {
+                CI_LOG_E( "Runtime Error -> Creating VoltageRatioInput:" );
+                displayError( prc );
+                return 1;
+            }
+            
+            return 0;
+        }
         
         /*
          *    Set the DataInterval inside of the attach handler to initialize the device with this value.
@@ -145,77 +215,6 @@ namespace po
 			}
 		}
 
-
-		//
-		//	Public method;
-		//	Returns last reported voltage ratio value from channel
-        //
-		double VoltageRatioInput::getVoltageRatio()
-		{
-			if( mHandle == NULL ) {
-				CI_LOG_W( "VoltageRatioInput handle does not exist" );
-				return 0.0;
-			}
-
-			PhidgetReturnCode prc;
-			double voltageRatio;
-			prc = PhidgetVoltageRatioInput_getVoltageRatio( mHandle, &voltageRatio );
-
-			if( EPHIDGET_OK != prc ) {
-				CI_LOG_E( "Runtime Error -> Creating VoltageRatioInput:" );
-				displayError( prc );
-				return 1;
-			}
-
-			return voltageRatio;
-		}
-        
-        //
-        //  Public method;
-        //  Returns last reported sensor value appropriate for the sensor
-        //
-        double VoltageRatioInput::getSensorValue() {
-            CI_LOG_V("placeholder");
-            if( mHandle == NULL ) {
-                CI_LOG_W( "VoltageRatioInput handle does not exist" );
-                return 0.0;
-            }
-            
-            PhidgetReturnCode prc;
-            double sensorValue;
-            prc = PhidgetVoltageRatioInput_getSensorValue( mHandle, &sensorValue );
-            
-            if( EPHIDGET_OK != prc ) {
-                CI_LOG_E( "Runtime Error -> Getting sensor value:" );
-                displayError( prc );
-                return 1;
-            }
-            
-            return sensorValue;
-        }
-
-
-
-		/**
-		* Creates a new instance of a VoltageRatioInput channel.
-		*
-		* @param pvrih Pointer to the PhidgetVoltageRatioInputHandle channel to create
-		* @return 0 if the operation succeeds, 1 if it fails
-		*/
-		int VoltageRatioInput::createVoltageRatioInput( PhidgetVoltageRatioInputHandle* pvrih )
-		{
-			PhidgetReturnCode prc;
-//            CI_LOG_V( "Creating VoltageRatioInput Channel..." );
-			prc = PhidgetVoltageRatioInput_create( pvrih );
-
-			if( EPHIDGET_OK != prc ) {
-				CI_LOG_E( "Runtime Error -> Creating VoltageRatioInput:" );
-				displayError( prc );
-				return 1;
-			}
-
-			return 0;
-		}
 
 		/**
 		* Sets the event handler for VoltageRatioInput's VoltageRatioChange event

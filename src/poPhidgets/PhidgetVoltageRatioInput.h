@@ -49,15 +49,13 @@ namespace po
 
 			protected:
 				VoltageRatioInput();
+                int createSpecificInput() override;
+                static int createVoltageRatioInput( PhidgetVoltageRatioInputHandle* pvrih );
                 void setDataInterval( uint32_t interval ) override;
                 void setChangeTrigger( double trigger ) override;
 
 			private:
 				PhidgetVoltageRatioInputHandle mHandle = NULL;
-				int createSpecificInput() override;
-
-				//	called during setup
-				static int createVoltageRatioInput( PhidgetVoltageRatioInputHandle* pvrih );
 
 				void setChangeHandlers() override;
 				int setVoltageRatioHandler( PhidgetVoltageRatioInputHandle pvrih, PhidgetVoltageRatioInput_OnVoltageRatioChangeCallback fptr );
