@@ -125,13 +125,16 @@ namespace po
 
 		void CCONV DistanceSensor::onDistanceChangeHandler( PhidgetDistanceSensorHandle ch, void* ctx, int distance )
 		{
-			CI_LOG_V( "onDistanceChangeHandler" );
+            CI_LOG_V( "onDistanceChangeHandler: distance: " << distance );
 		}
 
 		void CCONV DistanceSensor::onSonarReflectionsUpdateHandler( PhidgetDistanceSensorHandle ch, void* ctx, const uint32_t distances[8], const uint32_t amplitudes[8], uint32_t count )
 		{
 			CI_LOG_V( "onSonarReflectionsUpdateHandler" );
-		}
+            for (int i = 0; i < count; i++) {
+                CI_LOG_V("\t"<< i << "\tDistance: " << distances[i] << "\tAmplitude: " << amplitudes[i]);
+            }
+ 		}
 
 	}
 }
