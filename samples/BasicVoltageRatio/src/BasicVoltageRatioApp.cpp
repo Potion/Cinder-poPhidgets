@@ -4,8 +4,6 @@
 
 
 #include "poPhidgets/PhidgetVoltageRatioInput.h"
-#include "poPhidgets/PhidgetDistanceSensor.h"
-
 #include "cinder/Log.h"
 
 
@@ -26,7 +24,6 @@ class BasicVoltageRatioApp
 		void voltageRatioValueChanged( double ratio ) override;
 
 		po::phidget::VoltageRatioInputRef mInput;
-		po::phidget::DistanceSensorRef mDistanceInput;
 
 };
 
@@ -35,10 +32,6 @@ void BasicVoltageRatioApp::setup()
     mInput = po::phidget::VoltageRatioInput::create();
     mInput->setProperties( -1, 5, 10, 0.01 );
     mInput->createAndOpenChannel();
-
-//    mDistanceInput = po::phidget::DistanceSensor::create();
-//    mDistanceInput->setProperties( -1, 5 );
-//    mDistanceInput->createAndOpenChannel();
 }
 
 void BasicVoltageRatioApp::mouseDown( MouseEvent event )

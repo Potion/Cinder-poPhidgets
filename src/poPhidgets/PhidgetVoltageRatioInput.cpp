@@ -19,21 +19,6 @@ namespace po
 			, mChangeTrigger( 0.05 )
 		{}
 
-		//
-		//	set the desired properties of the input
-		//  Serial number: set to -1 to read from device
-		//  Channel number
-		//  Data interval: The frequency, in milliseconds, the device checks the value
-		//  Change trigger: amount of change that will trigger an event; set to 0 to trigger event every interval
-		//
-		void VoltageRatioInput::setProperties( int serialNum, int channelNum, int dataInterval, double changeTrigger )
-		{
-			mSerialNumber = serialNum;
-			mChannel = channelNum;
-			mDataInterval = dataInterval;
-			mChangeTrigger = changeTrigger;
-		}
-
 
 		//
 		//	close channel on destroy

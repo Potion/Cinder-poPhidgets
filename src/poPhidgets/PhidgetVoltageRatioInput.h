@@ -40,7 +40,6 @@ namespace po
 		{
 			public:
 				static VoltageRatioInputRef create();
-				void setProperties( int serialNum, int channelNum, int dataInterval, double changeTrigger );
 				void setDelegate( VoltageRatioInputDelegateRef delegate ) { mDelegate = delegate; };
 				double getVoltageRatio();
                 double getSensorValue();

@@ -5,6 +5,21 @@ namespace po
 {
 	namespace phidget
 	{
+        
+        //
+        //    set the desired properties of the input
+        //  Serial number: set to -1 to read from device
+        //  Channel number
+        //  Data interval: The frequency, in milliseconds, the device checks the value
+        //  Change trigger: amount of change that will trigger an event; set to 0 to trigger event every interval
+        //
+        void BaseInput::setProperties(int serialNum, int channelNum, uint32_t dataInterval, double changeTrigger) {
+            mSerialNumber = serialNum;
+            mChannel = channelNum;
+            mDataInterval = dataInterval;
+            mChangeTrigger = changeTrigger;
+        }
+
 		//
 		//	Once input's properties are set, can set up handlers and open channel
 		//
@@ -116,3 +131,5 @@ namespace po
 		}
 	}
 }
+
+
