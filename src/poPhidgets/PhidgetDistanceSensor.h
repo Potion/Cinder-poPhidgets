@@ -22,13 +22,9 @@ namespace po
 				PhidgetDistanceSensorHandle mHandle;
 				int createSpecificInput() override;
 
-				int setAttachDetachErrorHandlers( PhidgetHandle ch ) override;
 				void setChangeHandlers( PhidgetHandle ch ) override;
 
 				//	event handlers
-				static void CCONV onAttachHandler( PhidgetHandle ph, void* ctx );
-				static void CCONV onDetachHandler( PhidgetHandle ph, void* ctx );
-				static void CCONV onErrorHandler( PhidgetHandle phid, void* ctx, Phidget_ErrorEventCode errorCode, const char* errorString );
 				static void CCONV onDistanceChangeHandler( PhidgetDistanceSensorHandle ch, void* ctx, int distance );
 				static void CCONV onSonarReflectionsUpdateHandler( PhidgetDistanceSensorHandle ch, void* ctx, const uint32_t distances[8], const uint32_t amplitudes[8], uint32_t count );
 

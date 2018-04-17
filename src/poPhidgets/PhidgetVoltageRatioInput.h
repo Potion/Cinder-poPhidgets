@@ -59,21 +59,11 @@ namespace po
 				//	called during setup
 				static int createVoltageRatioInput( PhidgetVoltageRatioInputHandle* pvrih );
 
-				//	properties specific to this type of input
-				uint32_t mDataInterval;
-				double mChangeTrigger;
-
-				int setAttachDetachErrorHandlers( PhidgetHandle ch ) override;
 				void setChangeHandlers( PhidgetHandle ch ) override;
 				int setVoltageRatioHandler( PhidgetVoltageRatioInputHandle pvrih, PhidgetVoltageRatioInput_OnVoltageRatioChangeCallback fptr );
 
 				//	event handlers
-//                static void CCONV onAttachHandler( PhidgetHandle ph, void* ctx );
-//                static void CCONV onDetachHandler( PhidgetHandle ph, void* ctx );
 				static void CCONV onVoltageRatioChangeHandler( PhidgetVoltageRatioInputHandle pvrih, void* ctx, double ratio );
-
-				//	error display
-				//static void displayError( PhidgetReturnCode code );
 
 				//  communication
 				VoltageRatioInputDelegateRef mDelegate;

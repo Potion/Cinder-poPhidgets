@@ -108,6 +108,42 @@ namespace po
                 displayError( prc );
             }
         }
+        
+        /**
+         * Sets the event handlers for Phidget Attach, Phidget Detach, Phidget Error events
+         *
+         * @param ph The Phidget channel to add event handlers to
+         * @return 0 if the operation succeeds, 1 if it fails
+         */
+        int BaseInput::setAttachDetachErrorHandlers( PhidgetHandle ph )
+        {
+            PhidgetReturnCode prc;
+            prc = Phidget_setOnAttachHandler( ph, onAttachHandler, this );
+            
+            if( EPHIDGET_OK != prc ) {
+                CI_LOG_E( "Runtime Error -> Set Attach Handler" );
+                displayError( prc );
+                return 1;
+            }
+            
+            prc = Phidget_setOnDetachHandler( ph, onDetachHandler, NULL );
+            
+            if( EPHIDGET_OK != prc ) {
+                CI_LOG_E( "Runtime Error -> Set Detach Handler" );
+                displayError( prc );
+                return 1;
+            }
+            
+            prc = Phidget_setOnErrorHandler( ph, onErrorHandler, NULL );
+            
+            if( EPHIDGET_OK != prc ) {
+                CI_LOG_E( "Runtime Error -> Set Error Handler" );
+                displayError( prc );
+                return 1;
+            }
+            
+            return 0;
+        }
 
 		int BaseInput::openPhidgetChannelWithTimeout( PhidgetHandle ch, int timeout )
 		{
@@ -226,7 +262,6 @@ namespace po
          * @param ph The Phidget channel that fired the detach event
          * @param *ctx Context pointer
          */
-        
         void CCONV BaseInput::onDetachHandler( PhidgetHandle ph, void* ctx )
         {
             CI_LOG_V( "onDetachHandler" );
@@ -272,7 +307,7 @@ namespace po
         }
 
         /**
-         * Writes phidget error info to stderr.
+         * Writes phidget error info using Cinder Log.
          * Fired when a Phidget channel with onErrorHandler registered encounters an error in the library
          *
          * @param ph The Phidget channel that fired the error event

@@ -42,9 +42,10 @@ namespace po
 				int setChannel( PhidgetHandle ph, int channel = 0 );
                 void setHubPort( PhidgetHandle ph, int hubPort );
 
+                //  Input must create itself as its specific type
 				virtual int createSpecificInput() = 0;
 
-				virtual int setAttachDetachErrorHandlers( PhidgetHandle ph ) = 0;
+				int setAttachDetachErrorHandlers( PhidgetHandle ph );
 				virtual void setChangeHandlers( PhidgetHandle ph ) {};
 				int openPhidgetChannelWithTimeout( PhidgetHandle ch, int timeout = 5000 );
             

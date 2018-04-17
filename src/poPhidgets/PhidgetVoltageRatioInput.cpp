@@ -15,8 +15,6 @@ namespace po
 		}
 
 		VoltageRatioInput::VoltageRatioInput()
-			: mDataInterval( 100 )
-			, mChangeTrigger( 0.05 )
 		{}
 
 
@@ -58,10 +56,10 @@ namespace po
 		void VoltageRatioInput::setChangeHandlers( PhidgetHandle ph )
 		{
 			if( setVoltageRatioHandler( mHandle, onVoltageRatioChangeHandler ) ) {
+                CI_LOG_E("Unable to set Voltage Ratio Change Handler");
 				return;
 			}
 		}
-
 
 
 		//
@@ -136,47 +134,6 @@ namespace po
 		}
 
 		/**
-		* Sets the event handlers for Phidget Attach, Phidget Detach, Phidget Error events
-		*
-		* @param ph The Phidget channel to add event handlers to
-		* @return 0 if the operation succeeds, 1 if it fails
-		*/
-		int VoltageRatioInput::setAttachDetachErrorHandlers( PhidgetHandle ch )
-		{
-			PhidgetReturnCode prc;
-//            CI_LOG_V( "Setting OnAttachHandler..." );
-			prc = Phidget_setOnAttachHandler( ch, onAttachHandler, this );
-
-			if( EPHIDGET_OK != prc ) {
-				CI_LOG_E( "Runtime Error -> Set Attach Handler" );
-				displayError( prc );
-				return 1;
-			}
-
-//            CI_LOG_V( "Setting OnDetachHandler..." );
-			prc = Phidget_setOnDetachHandler( ch, onDetachHandler, NULL );
-
-			if( EPHIDGET_OK != prc ) {
-				CI_LOG_E( "Runtime Error -> Set Detach Handler" );
-				displayError( prc );
-				return 1;
-			}
-
-//            CI_LOG_V( "Setting OnErrorHandler..." );
-			prc = Phidget_setOnErrorHandler( ch, onErrorHandler, NULL );
-
-			if( EPHIDGET_OK != prc ) {
-				CI_LOG_E( "Runtime Error -> Set Error Handler" );
-				displayError( prc );
-				return 1;
-			}
-
-			return 0;
-		}
-
-
-
-		/**
 		* Sets the event handler for VoltageRatioInput's VoltageRatioChange event
 		*
 		* @param pvrih The PhidgetVoltageRatioInputHandle channel to add the event to
@@ -186,7 +143,6 @@ namespace po
 		int VoltageRatioInput::setVoltageRatioHandler( PhidgetVoltageRatioInputHandle pvrih, PhidgetVoltageRatioInput_OnVoltageRatioChangeCallback fptr )
 		{
 			PhidgetReturnCode prc;
-//            CI_LOG_V( "Setting voltage ratio handler" );
 			prc = PhidgetVoltageRatioInput_setOnVoltageRatioChangeHandler( pvrih, fptr, this );
 
 			if( EPHIDGET_OK != prc ) {
@@ -197,8 +153,6 @@ namespace po
 
 			return 0;
 		}
-
-
 
 
         /*
