@@ -20,7 +20,16 @@ namespace po
 		{
 			public:
                 virtual void setProperties( int serialNum, int channelNum, uint32_t dataInterval, double changeTrigger, int hubPort = -1 );
-				void createAndOpenChannel( int timeout = 5000 );
+            
+                //  set individual properties
+                void setInitialSerialNumber(int serialNum) { mSerialNumber = serialNum; };
+                void setInitialChannel(int channelNum) { mChannel = channelNum; };
+                void setInitialDataInterval(uint32_t dataInterval) { mDataInterval = dataInterval; };
+                void setInitialChangeTriggerValue(double changeTrigger) { mChangeTrigger = changeTrigger; };
+                void setInitialChangeTriggerUInt32Value(uint32_t changeTriggerUInt32){mChangeTriggerUInt32 = changeTriggerUInt32;};
+                void setInitialHubPort(int hubPort) {mHubPort = hubPort;};
+            
+                void createAndOpenChannel( int timeout = 5000 );
 				int closePhidgetChannel( PhidgetHandle ch );
 				virtual PhidgetHandle getHandle() = 0;
 

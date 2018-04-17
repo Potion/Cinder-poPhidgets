@@ -25,7 +25,14 @@ class DistanceSensorApp : public App {
 void DistanceSensorApp::setup()
 {
     mDistanceInput = po::phidget::DistanceSensor::create();
-    mDistanceInput->setProperties(-1, 0, 100, 0, 3);
+    
+    //  set properties before opening channel
+    mDistanceInput->setInitialSerialNumber(-1);
+    mDistanceInput->setInitialChannel(0);
+    mDistanceInput->setInitialDataInterval(0);
+    mDistanceInput->setInitialChangeTriggerUInt32Value(100);
+    mDistanceInput->setInitialHubPort(3);
+
     mDistanceInput->createAndOpenChannel();
 }
 
