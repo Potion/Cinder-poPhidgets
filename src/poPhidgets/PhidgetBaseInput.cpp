@@ -205,9 +205,11 @@ namespace po
             int32_t hubPort;
             int32_t channel;
             
-            //    Find max and min data intervals
+            //  Set data intervals
             baseInputInstance->setDataInterval( baseInputInstance->getDataInterval() );
+            //  Set change trigger (type will depend on input)
             baseInputInstance->setChangeTrigger( baseInputInstance->getChangeTrigger() );
+            baseInputInstance->setChangeTriggerUInt32( baseInputInstance->getChangeTriggerUInt32() );
             prc = Phidget_getDeviceSerialNumber( ph, &serialNumber );
             CI_LOG_V( "Getting serial number: " << serialNumber );
             

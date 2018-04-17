@@ -50,7 +50,6 @@ namespace po
 			protected:
 				VoltageRatioInput();
                 int createSpecificInput() override;
-                static int createVoltageRatioInput( PhidgetVoltageRatioInputHandle* pvrih );
                 void setDataInterval( uint32_t interval ) override;
                 void setChangeTrigger( double trigger ) override;
 

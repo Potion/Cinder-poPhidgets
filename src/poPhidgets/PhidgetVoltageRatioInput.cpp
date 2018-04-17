@@ -84,31 +84,17 @@ namespace po
         }
         
         
-		//
-		//	Called by base function;
-		//	creates voltage ratio input
-		//
-		int VoltageRatioInput::createSpecificInput()
-		{
-
-			if( createVoltageRatioInput( &mHandle ) ) {
-				return 1;
-			}
-			else {
-				return 0;
-			}
-		}
-
         /**
          * Creates a new instance of a VoltageRatioInput channel.
          *
          * @param pvrih Pointer to the PhidgetVoltageRatioInputHandle channel to create
          * @return 0 if the operation succeeds, 1 if it fails
          */
-        int VoltageRatioInput::createVoltageRatioInput( PhidgetVoltageRatioInputHandle* pvrih )
-        {
+		int VoltageRatioInput::createSpecificInput()
+		{
+
             PhidgetReturnCode prc;
-            prc = PhidgetVoltageRatioInput_create( pvrih );
+            prc = PhidgetVoltageRatioInput_create( &mHandle );
             
             if( EPHIDGET_OK != prc ) {
                 CI_LOG_E( "Runtime Error -> Creating VoltageRatioInput:" );
@@ -117,8 +103,8 @@ namespace po
             }
             
             return 0;
-        }
-        
+		}
+
         /*
          *    Set the DataInterval inside of the attach handler to initialize the device with this value.
          *    DataInterval defines the minimum time between VoltageRatioChange events.

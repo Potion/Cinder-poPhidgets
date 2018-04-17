@@ -18,9 +18,13 @@ namespace po
 				~DistanceSensor();
 
 			protected:
+                int createSpecificInput() override;
+                static int createDistanceSensor(PhidgetDistanceSensorHandle* dsh);
+                void setDataInterval( uint32_t interval ) override;
+                void setChangeTriggerUInt32( uint32_t trigger ) override;
+
 			private:
-				PhidgetDistanceSensorHandle mHandle;
-				int createSpecificInput() override;
+				PhidgetDistanceSensorHandle mHandle = NULL;
 
 				void setChangeHandlers() override;
 

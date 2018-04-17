@@ -27,8 +27,11 @@ namespace po
                 //  methods to be overwritten in specific input classes
                 virtual void setDataInterval( uint32_t interval ){};
                 uint32_t getDataInterval(){ return mDataInterval; };
+    
                 virtual void setChangeTrigger( double trigger ){};
+                virtual void setChangeTriggerUInt32(uint32_t trigger){};
                 double getChangeTrigger() { return mChangeTrigger; };
+                uint32_t getChangeTriggerUInt32() { return mChangeTriggerUInt32; };
             
 			protected:
 				//	properties of all inputs
@@ -36,6 +39,7 @@ namespace po
 				int mChannel;
                 uint32_t mDataInterval;
                 double mChangeTrigger;
+                uint32_t mChangeTriggerUInt32;
                 int mHubPort;
 
                 //  Input must create itself as its specific type
