@@ -27,6 +27,8 @@ namespace po
                 //  methods to be overwritten in specific input classes
                 virtual void setDataIntervals( uint32_t interval ){};
                 uint32_t getDataInterval(){ return mDataInterval; };
+                virtual void setChangeTrigger(double trigger){};
+                double getChangeTrigger() { return mChangeTrigger; };
             
 			protected:
 				//	properties of all inputs

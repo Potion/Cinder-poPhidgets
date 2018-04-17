@@ -50,6 +50,7 @@ namespace po
 			protected:
 				VoltageRatioInput();
                 void setDataIntervals( uint32_t interval ) override;
+                void setChangeTrigger( double trigger ) override;
 
 			private:
 				PhidgetVoltageRatioInputHandle mHandle = NULL;

@@ -159,12 +159,12 @@
 		21A73C1820756ED700CC25AA /* poPhidgets */ = {
 			isa = PBXGroup;
 			children = (
-				21EF1C7D207E60FA000C6723 /* PhidgetBaseInput.cpp */,
-				21EF1C7B207E60FA000C6723 /* PhidgetBaseInput.h */,
 				21EF1C7E207E60FA000C6723 /* PhidgetDistanceSensor.cpp */,
 				21EF1C7C207E60FA000C6723 /* PhidgetDistanceSensor.h */,
 				21A73C1920756ED700CC25AA /* PhidgetVoltageRatioInput.cpp */,
 				21A73C1A20756ED700CC25AA /* PhidgetVoltageRatioInput.h */,
+				21EF1C7D207E60FA000C6723 /* PhidgetBaseInput.cpp */,
+				21EF1C7B207E60FA000C6723 /* PhidgetBaseInput.h */,
 			);
 			path = poPhidgets;
 			sourceTree = "<group>";

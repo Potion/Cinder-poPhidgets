@@ -209,7 +209,7 @@ namespace po
 		*/
 		void CCONV VoltageRatioInput::onAttachHandler( PhidgetHandle ph, void* ctx )
 		{
-			VoltageRatioInput* voltageRatioInstance = ( VoltageRatioInput* )ctx;
+//            VoltageRatioInput* voltageRatioInstance = ( VoltageRatioInput* )ctx;
             BaseInput* baseInputInstance = ( BaseInput* ) ctx;
 
 			CI_LOG_V( "onAttachHandler" );
@@ -227,49 +227,8 @@ namespace po
 
 			//	Find max and min data intervals
             baseInputInstance->setDataIntervals( baseInputInstance->getDataInterval() );
+            baseInputInstance->setChangeTrigger( baseInputInstance->getChangeTrigger() );
 
-
-			/*
-			*	Set the VoltageRatioChangeTrigger inside of the attach handler to initialize the device with this value.
-			*	VoltageRatioChangeTrigger will affect the frequency of VoltageRatioChange events, by limiting them to only occur when
-			*	the ratio changes by at least the value set.
-			*/
-
-			//  find min and max change trigger
-
-			double minChangeTrigger;
-			double maxChangeTrigger;
-
-			prc = PhidgetVoltageRatioInput_getMinVoltageRatioChangeTrigger( ( PhidgetVoltageRatioInputHandle )ph, &minChangeTrigger );
-
-			if( EPHIDGET_OK != prc ) {
-				CI_LOG_E( "Runtime Error -> Getting min change trigger" );
-				displayError( prc );
-				return;
-			}
-
-			prc = PhidgetVoltageRatioInput_getMaxVoltageRatioChangeTrigger( ( PhidgetVoltageRatioInputHandle )ph, &maxChangeTrigger );
-
-			if( EPHIDGET_OK != prc ) {
-				CI_LOG_E( "Runtime Error -> Getting max change trigger" );
-				displayError( prc );
-				return;
-			}
-
-			CI_LOG_D( "Max and min voltage ratio change triggers\t Max: " << maxChangeTrigger << ", min: " << minChangeTrigger );
-			CI_LOG_V( "Setting change trigger to " << voltageRatioInstance->mChangeTrigger );
-
-			if( voltageRatioInstance->mChangeTrigger > maxChangeTrigger || voltageRatioInstance->mChangeTrigger < minChangeTrigger ) {
-				CI_LOG_W( "Setting change trigger to value outside the max and min limits." );
-			}
-
-			prc = PhidgetVoltageRatioInput_setVoltageRatioChangeTrigger( ( PhidgetVoltageRatioInputHandle )ph, voltageRatioInstance->mChangeTrigger );
-
-			if( EPHIDGET_OK != prc ) {
-				CI_LOG_E( "Runtime Error -> Set VoltageRatioChangeTrigger: \n\t" );
-				displayError( prc );
-				return;
-			}
 
 			prc = Phidget_getDeviceSerialNumber( ph, &serialNumber );
 			CI_LOG_V( "Getting serial number: " << serialNumber );
@@ -393,6 +352,53 @@ namespace po
             prc = PhidgetVoltageRatioInput_setDataInterval( mHandle, mDataInterval );
             if( EPHIDGET_OK != prc ) {
                 CI_LOG_E( "Runtime Error -> Set DataInterval" );
+                displayError( prc );
+                return;
+            }
+        }
+        
+        //
+        //  Set change trigger for the specific input
+        //
+        /*
+         *    Set the VoltageRatioChangeTrigger inside of the attach handler to initialize the device with this value.
+         *    VoltageRatioChangeTrigger will affect the frequency of VoltageRatioChange events, by limiting them to only occur when
+         *    the ratio changes by at least the value set.
+         */
+        void VoltageRatioInput::setChangeTrigger(double trigger)
+        {
+            //  find min and max change trigger
+            double minChangeTrigger;
+            double maxChangeTrigger;
+            PhidgetReturnCode prc;
+            
+            prc = PhidgetVoltageRatioInput_getMinVoltageRatioChangeTrigger( mHandle, &minChangeTrigger );
+            
+            if( EPHIDGET_OK != prc ) {
+                CI_LOG_E( "Runtime Error -> Getting min change trigger" );
+                displayError( prc );
+                return;
+            }
+            
+            prc = PhidgetVoltageRatioInput_getMaxVoltageRatioChangeTrigger( mHandle, &maxChangeTrigger );
+            
+            if( EPHIDGET_OK != prc ) {
+                CI_LOG_E( "Runtime Error -> Getting max change trigger" );
+                displayError( prc );
+                return;
+            }
+            
+            CI_LOG_D( "Max and min voltage ratio change triggers\t Max: " << maxChangeTrigger << ", min: " << minChangeTrigger );
+            CI_LOG_V( "Setting change trigger to " << mChangeTrigger );
+            
+            if( mChangeTrigger > maxChangeTrigger || mChangeTrigger < minChangeTrigger ) {
+                CI_LOG_W( "Setting change trigger to value outside the max and min limits." );
+            }
+            
+            prc = PhidgetVoltageRatioInput_setVoltageRatioChangeTrigger( mHandle, mChangeTrigger );
+            
+            if( EPHIDGET_OK != prc ) {
+                CI_LOG_E( "Runtime Error -> Set VoltageRatioChangeTrigger: \n\t" );
                 displayError( prc );
                 return;
             }
