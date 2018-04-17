@@ -13,13 +13,14 @@ namespace po
         //  Data interval: The frequency, in milliseconds, the device checks the value
         //  Change trigger: amount of change that will trigger an event; set to 0 to trigger event every interval
         //
-        void BaseInput::setProperties(int serialNum, int channelNum, uint32_t dataInterval, double changeTrigger) {
+        void BaseInput::setProperties(int serialNum, int channelNum, uint32_t dataInterval, double changeTrigger, int hubPort) {
             mSerialNumber = serialNum;
             mChannel = channelNum;
             mDataInterval = dataInterval;
             mChangeTrigger = changeTrigger;
+            mHubPort = hubPort;
         }
-
+        
 		//
 		//	Once input's properties are set, can set up handlers and open channel
 		//
@@ -34,6 +35,23 @@ namespace po
 			if( setChannel( getHandle(), mChannel ) ) {
 				return;
 			}
+            
+            //  see if this is a hub port device
+            int isHubPort = 0;
+            PhidgetReturnCode prc = Phidget_getIsHubPortDevice(getHandle(), &isHubPort);
+            if( EPHIDGET_OK != prc ) {
+                CI_LOG_E( "Runtime Error -> Getting isHubPortDevice" );
+                displayError( prc );
+                return;
+            }
+            
+            CI_LOG_V("IS this a hub port device? " << isHubPort);
+
+            if (isHubPort && mHubPort != -1) {
+                CI_LOG_V("We have an item here that's a hub port device");
+            } else {
+                CI_LOG_V("Problem with the hub port device");
+            }
 
 			if( setAttachDetachErrorHandlers( getHandle() ) ) {
 				return;
@@ -64,7 +82,6 @@ namespace po
 			return 0;
 		}
 
-
 		int BaseInput::setChannel( PhidgetHandle ph, int channel )
 		{
 			CI_LOG_V( "Setting channel to " << channel );
@@ -80,6 +97,17 @@ namespace po
 			return 0;
 		}
 
+        void BaseInput::setHubPort(PhidgetHandle ph, int hubPort)
+        {
+            CI_LOG_V( "Setting Phidget hub port " << hubPort );
+            PhidgetReturnCode prc;
+            prc = Phidget_setHubPort(ph, hubPort);
+            
+            if( EPHIDGET_OK != prc ) {
+                CI_LOG_E( "Runtime Error -> Setting HubPort" );
+                displayError( prc );
+            }
+        }
 
 		int BaseInput::openPhidgetChannelWithTimeout( PhidgetHandle ch, int timeout )
 		{
@@ -129,7 +157,19 @@ namespace po
 			CI_LOG_E( "Error desc: " << error );
 
 		}
+        
+        /**
+         * Writes phidget error info to stderr.
+         * Fired when a Phidget channel with onErrorHandler registered encounters an error in the library
+         *
+         * @param ph The Phidget channel that fired the error event
+         * @param *ctx Context pointer
+         * @param errorCode the code associated with the error of enum type Phidget_ErrorEventCode
+         * @param *errorString string containing the description of the error fired
+         */
+        void BaseInput::onErrorHandler(PhidgetHandle ph, void *ctx, Phidget_ErrorEventCode errorCode, const char *errorString)
+        {
+            CI_LOG_E( "[Phidget Error Event] -> " << errorString << ", code:" << errorCode );
+        }
 	}
 }
-
-

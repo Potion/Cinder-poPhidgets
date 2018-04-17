@@ -8,11 +8,6 @@ namespace po
 			return DistanceSensorRef( new DistanceSensor() );
 		}
 
-		void DistanceSensor::setProperties( int serialNum, int channelNum )
-		{
-			mSerialNumber = serialNum;
-			mChannel = channelNum;
-		}
 
 		//
 		//	close channel on destroy

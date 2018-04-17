@@ -49,7 +49,7 @@ namespace po
 
 			protected:
 				VoltageRatioInput();
-				//void setup( int serialNum = -1, int channelNum = 0, int dataInterval = 100, double changeTrigger = 0.05 );
+                void setDataIntervals( uint32_t interval ) override;
 
 			private:
 				PhidgetVoltageRatioInputHandle mHandle = NULL;
@@ -69,7 +69,6 @@ namespace po
 				//	event handlers
 				static void CCONV onAttachHandler( PhidgetHandle ph, void* ctx );
 				static void CCONV onDetachHandler( PhidgetHandle ph, void* ctx );
-				static void CCONV onErrorHandler( PhidgetHandle phid, void* ctx, Phidget_ErrorEventCode errorCode, const char* errorString );
 				static void CCONV onVoltageRatioChangeHandler( PhidgetVoltageRatioInputHandle pvrih, void* ctx, double ratio );
 
 				//	error display

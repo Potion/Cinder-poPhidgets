@@ -13,8 +13,6 @@ namespace po
 		{
 			public:
 				static DistanceSensorRef create();
-				void setProperties( int serialNum, int channelNum );
-
 
 				virtual PhidgetHandle getHandle() override { return PhidgetHandle( mHandle ); };
 				~DistanceSensor();

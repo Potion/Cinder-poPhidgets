@@ -4,6 +4,8 @@
 
 #include "poPhidgets/PhidgetDistanceSensor.h"
 
+#define CI_MIN_LOG_LEVEL 4
+
 using namespace ci;
 using namespace ci::app;
 using namespace std;
@@ -23,8 +25,7 @@ class DistanceSensorApp : public App {
 void DistanceSensorApp::setup()
 {
     mDistanceInput = po::phidget::DistanceSensor::create();
-    mDistanceInput->setProperties(0, 0);
-    
+    mDistanceInput->setProperties(-1, 0, 100, 0, 3);
     mDistanceInput->createAndOpenChannel();
 }
 

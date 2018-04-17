@@ -210,6 +210,7 @@ namespace po
 		void CCONV VoltageRatioInput::onAttachHandler( PhidgetHandle ph, void* ctx )
 		{
 			VoltageRatioInput* voltageRatioInstance = ( VoltageRatioInput* )ctx;
+            BaseInput* baseInputInstance = ( BaseInput* ) ctx;
 
 			CI_LOG_V( "onAttachHandler" );
 			PhidgetReturnCode prc;
@@ -225,40 +226,8 @@ namespace po
 			 */
 
 			//	Find max and min data intervals
+            baseInputInstance->setDataIntervals( baseInputInstance->getDataInterval() );
 
-			uint32_t minDataInterval;
-			uint32_t maxDataInterval;
-
-			prc = PhidgetVoltageRatioInput_getMinDataInterval( ( PhidgetVoltageRatioInputHandle )ph, &minDataInterval );
-
-			if( EPHIDGET_OK != prc ) {
-				CI_LOG_E( "Runtime Error -> Getting min data interval" );
-				displayError( prc );
-				return;
-			}
-
-			prc = PhidgetVoltageRatioInput_getMaxDataInterval( ( PhidgetVoltageRatioInputHandle )ph, &maxDataInterval );
-
-			if( EPHIDGET_OK != prc ) {
-				CI_LOG_E( "Runtime Error -> Getting max data interval" );
-				displayError( prc );
-				return;
-			}
-
-			CI_LOG_D( "Max and min data intervals (in milliseconds)\t Max: " << maxDataInterval << ", min: " << minDataInterval );
-
-			if( voltageRatioInstance->mDataInterval > maxDataInterval || voltageRatioInstance->mDataInterval < minDataInterval ) {
-				CI_LOG_W( "Setting data interval to value outside max and min limits." );
-			}
-
-			//  Set the actual data interval
-			prc = PhidgetVoltageRatioInput_setDataInterval( ( PhidgetVoltageRatioInputHandle )ph, voltageRatioInstance->mDataInterval );
-
-			if( EPHIDGET_OK != prc ) {
-				CI_LOG_E( "Runtime Error -> Set DataInterval" );
-				displayError( prc );
-				return;
-			}
 
 			/*
 			*	Set the VoltageRatioChangeTrigger inside of the attach handler to initialize the device with this value.
@@ -392,20 +361,42 @@ namespace po
 			}
 		}
 
-		/**
-		* Writes phidget error info to stderr.
-		* Fired when a Phidget channel with onErrorHandler registered encounters an error in the library
-		*
-		* @param ph The Phidget channel that fired the error event
-		* @param *ctx Context pointer
-		* @param errorCode the code associated with the error of enum type Phidget_ErrorEventCode
-		* @param *errorString string containing the description of the error fired
-		*/
-		void CCONV VoltageRatioInput::onErrorHandler( PhidgetHandle phid, void* ctx, Phidget_ErrorEventCode errorCode, const char* errorString )
-		{
-			CI_LOG_E( "[Phidget Error Event] -> " << errorString << ", code:" << errorCode );
-		}
-
+        //
+        //  Set data interval for specific input
+        //
+        void VoltageRatioInput::setDataIntervals(uint32_t interval) {
+            uint32_t minDataInterval;
+            uint32_t maxDataInterval;
+            PhidgetReturnCode prc;
+            
+            prc = PhidgetVoltageRatioInput_getMinDataInterval( mHandle, &minDataInterval );
+            if( EPHIDGET_OK != prc ) {
+                CI_LOG_E( "Runtime Error -> Getting min data interval" );
+                displayError( prc );
+                return;
+            }
+            
+            prc = PhidgetVoltageRatioInput_getMaxDataInterval( mHandle, &maxDataInterval );
+            if( EPHIDGET_OK != prc ) {
+                CI_LOG_E( "Runtime Error -> Getting max data interval" );
+                displayError( prc );
+                return;
+            }
+            
+            CI_LOG_D( "Max and min data intervals (in milliseconds)\t Max: " << maxDataInterval << ", min: " << minDataInterval );
+            
+            if( mDataInterval > maxDataInterval || mDataInterval < minDataInterval ) {
+                CI_LOG_W( "Setting data interval to value outside max and min limits." );
+            }
+            
+            //  Set the actual data interval
+            prc = PhidgetVoltageRatioInput_setDataInterval( mHandle, mDataInterval );
+            if( EPHIDGET_OK != prc ) {
+                CI_LOG_E( "Runtime Error -> Set DataInterval" );
+                displayError( prc );
+                return;
+            }
+        }
 
 		/**
 		* Outputs the VoltageRatioInput's most recently reported ratio.
@@ -440,4 +431,7 @@ namespace po
 		}
 	}
 }
+
+
+
 
