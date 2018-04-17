@@ -53,7 +53,8 @@ namespace po
 				static void displayError( PhidgetReturnCode code );
             
                 //  event handlers
-                
+                static void CCONV onAttachHandler( PhidgetHandle ph, void* ctx );
+
                 static void CCONV onErrorHandler( PhidgetHandle ph, void* ctx, Phidget_ErrorEventCode errorCode, const char* errorString );
 
 

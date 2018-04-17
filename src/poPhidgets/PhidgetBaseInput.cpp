@@ -171,5 +171,66 @@ namespace po
         {
             CI_LOG_E( "[Phidget Error Event] -> " << errorString << ", code:" << errorCode );
         }
+        
+        /**
+         * Configures the device's DataInterval and ChangeTrigger.
+         * Displays info about the attached phidget channel.
+         * Fired when a Phidget channel with onAttachHandler registered attaches
+         *
+         * @param ph The Phidget channel that fired the attach event
+         * @param *ctx Context pointer
+         */
+        void CCONV BaseInput::onAttachHandler( PhidgetHandle ph, void* ctx )
+        {
+            BaseInput* baseInputInstance = ( BaseInput* ) ctx;
+            
+            CI_LOG_V( "onAttachHandler" );
+            PhidgetReturnCode prc;
+            int32_t serialNumber;
+            PhidgetHandle hub;
+            int32_t hubPort;
+            int32_t channel;
+            
+            //    Find max and min data intervals
+            baseInputInstance->setDataIntervals( baseInputInstance->getDataInterval() );
+            baseInputInstance->setChangeTrigger( baseInputInstance->getChangeTrigger() );
+            prc = Phidget_getDeviceSerialNumber( ph, &serialNumber );
+            CI_LOG_V( "Getting serial number: " << serialNumber );
+            
+            if( EPHIDGET_OK != prc ) {
+                CI_LOG_E( "Runtime Error -> Get DeviceSerialNumber: \n\t" );
+                displayError( prc );
+                return;
+            }
+            
+            prc = Phidget_getChannel( ph, &channel );
+            CI_LOG_V( "Getting channel: " << channel );
+            
+            if( EPHIDGET_OK != prc ) {
+                CI_LOG_E( "Runtime Error -> Get Channel: \n\t" );
+                displayError( prc );
+                return;
+            }
+            
+            //Check if this is a VINT device
+            prc = Phidget_getHub( ph, &hub );
+            CI_LOG_V( "Checking hub: " << hub );
+            
+            if( EPHIDGET_WRONGDEVICE != prc ) {
+                prc = Phidget_getHubPort( ph, &hubPort );
+                
+                if( EPHIDGET_OK != prc ) {
+                    CI_LOG_E( "Runtime Error -> Get HubPort: \n\t" );
+                    displayError( prc );
+                    return;
+                }
+                
+                CI_LOG_V( "Attach Event: Serial Number: " << serialNumber << "\n\t-> Hub Port: " << hubPort << "\n\t-> Channel: " << channel );
+            }
+            else {
+                CI_LOG_V( "Attach Event:Serial Number: " << serialNumber << "\n\t-> Channel: " << channel );
+            }
+        }
+
 	}
 }
