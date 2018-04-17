@@ -19,7 +19,6 @@ namespace po
 			: public std::enable_shared_from_this<BaseInput>
 		{
 			public:
-                virtual void setProperties( int serialNum, int channelNum, uint32_t dataInterval, double changeTrigger, int hubPort = -1 );
             
                 //  set individual properties
                 void setInitialSerialNumber(int serialNum) { mSerialNumber = serialNum; };
@@ -43,6 +42,8 @@ namespace po
                 uint32_t getChangeTriggerUInt32() { return mChangeTriggerUInt32; };
             
 			protected:
+                BaseInput();
+            
 				//	properties of all inputs
 				int mSerialNumber;
 				int mChannel;

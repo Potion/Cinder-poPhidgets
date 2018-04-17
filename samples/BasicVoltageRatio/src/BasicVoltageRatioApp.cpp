@@ -30,7 +30,14 @@ class BasicVoltageRatioApp
 void BasicVoltageRatioApp::setup()
 {
     mInput = po::phidget::VoltageRatioInput::create();
-    mInput->setProperties( -1, 5, 10, 0.01 );
+    
+    //  set individual properties before opening channel
+    //  set properties before opening channel
+    mInput->setInitialSerialNumber(-1);
+    mInput->setInitialChannel(5);
+    mInput->setInitialDataInterval(10);
+    mInput->setInitialChangeTriggerValue(0.01);
+
     mInput->createAndOpenChannel();
 }
 

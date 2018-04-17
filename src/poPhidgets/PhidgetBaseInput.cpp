@@ -14,13 +14,15 @@ namespace po
         //  Data interval: The frequency, in milliseconds, the device checks the value
         //  Change trigger: amount of change that will trigger an event; set to 0 to trigger event every interval
         //
-        void BaseInput::setProperties(int serialNum, int channelNum, uint32_t dataInterval, double changeTrigger, int hubPort) {
-            mSerialNumber = serialNum;
-            mChannel = channelNum;
-            mDataInterval = dataInterval;
-            mChangeTrigger = changeTrigger;
-            mHubPort = hubPort;
-        }
+        
+        BaseInput::BaseInput()
+        : mSerialNumber(-1)
+        , mChannel(0)
+        , mDataInterval(0)
+        , mChangeTrigger(0)
+        , mChangeTriggerUInt32(0)
+        , mHubPort(-1)
+        {}
         
 		//
 		//	Once input's properties are set, can set up handlers and open channel
