@@ -200,57 +200,6 @@ namespace po
 
 
 
-		/**
-		* Displays info about the detached phidget channel.
-		* Fired when a Phidget channel with onDetachHandler registered detaches
-		*
-		* @param ph The Phidget channel that fired the detach event
-		* @param *ctx Context pointer
-		*/
-
-		inline void CCONV VoltageRatioInput::onDetachHandler( PhidgetHandle ph, void* ctx )
-		{
-			CI_LOG_V( "onDetachHandler" );
-			PhidgetReturnCode prc;
-			PhidgetHandle hub;
-			int serialNumber;
-			int hubPort;
-			int channel;
-
-			prc = Phidget_getDeviceSerialNumber( ph, &serialNumber );
-
-			if( EPHIDGET_OK != prc ) {
-				CI_LOG_E( "Runtime Error -> Get DeviceSerialNumber: \n\t" );
-				displayError( prc );
-				return;
-			}
-
-			prc = Phidget_getChannel( ph, &channel );
-
-			if( EPHIDGET_OK != prc ) {
-				CI_LOG_E( "Runtime Error -> Get Channel: \n\t" );
-				displayError( prc );
-				return;
-			}
-
-			//Check if this is a VINT device
-			prc = Phidget_getHub( ph, &hub );
-
-			if( EPHIDGET_WRONGDEVICE != prc ) {
-				prc = Phidget_getHubPort( ph, &hubPort );
-
-				if( EPHIDGET_OK != prc ) {
-					CI_LOG_E( "Runtime Error -> Get HubPort: \n\t" );
-					displayError( prc );
-					return;
-				}
-
-				CI_LOG_V( "Detach Event:-> Serial Number: " << serialNumber << "\n\t-> Hub Port: " << hubPort << "\n\t-> Channel " << channel );
-			}
-			else {
-				CI_LOG_V( "Detach Event:-> Serial Number: " << serialNumber << "\n\t-> Channel " << channel );
-			}
-		}
 
         /*
          *    Set the DataInterval inside of the attach handler to initialize the device with this value.
@@ -345,20 +294,15 @@ namespace po
 		*/
 		void CCONV VoltageRatioInput::onVoltageRatioChangeHandler( PhidgetVoltageRatioInputHandle pvrih, void* ctx, double ratio )
 		{
-//            CI_LOG_V( "[VoltageRatio Event] -> Ratio: " << ratio );
 			VoltageRatioInput* voltageRatioInstance = ( VoltageRatioInput* )ctx;
 
 			if( !voltageRatioInstance->mDelegate.expired() ) {
 				voltageRatioInstance->mDelegate.lock()->voltageRatioValueChanged( ratio );
 			}
-			else {
-//                CI_LOG_V( "delegate expired" );
-			}
 
 			voltageRatioInstance->testCallbackFunction( ratio );
 		}
-
-
+        
 		//
 		//  test
 		//

@@ -69,7 +69,7 @@ namespace po
 
 				//	event handlers
 //                static void CCONV onAttachHandler( PhidgetHandle ph, void* ctx );
-				static void CCONV onDetachHandler( PhidgetHandle ph, void* ctx );
+//                static void CCONV onDetachHandler( PhidgetHandle ph, void* ctx );
 				static void CCONV onVoltageRatioChangeHandler( PhidgetVoltageRatioInputHandle pvrih, void* ctx, double ratio );
 
 				//	error display

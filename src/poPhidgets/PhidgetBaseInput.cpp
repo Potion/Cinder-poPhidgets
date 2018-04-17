@@ -159,20 +159,6 @@ namespace po
 		}
         
         /**
-         * Writes phidget error info to stderr.
-         * Fired when a Phidget channel with onErrorHandler registered encounters an error in the library
-         *
-         * @param ph The Phidget channel that fired the error event
-         * @param *ctx Context pointer
-         * @param errorCode the code associated with the error of enum type Phidget_ErrorEventCode
-         * @param *errorString string containing the description of the error fired
-         */
-        void BaseInput::onErrorHandler(PhidgetHandle ph, void *ctx, Phidget_ErrorEventCode errorCode, const char *errorString)
-        {
-            CI_LOG_E( "[Phidget Error Event] -> " << errorString << ", code:" << errorCode );
-        }
-        
-        /**
          * Configures the device's DataInterval and ChangeTrigger.
          * Displays info about the attached phidget channel.
          * Fired when a Phidget channel with onAttachHandler registered attaches
@@ -232,5 +218,71 @@ namespace po
             }
         }
 
+        
+        /**
+         * Displays info about the detached phidget channel.
+         * Fired when a Phidget channel with onDetachHandler registered detaches
+         *
+         * @param ph The Phidget channel that fired the detach event
+         * @param *ctx Context pointer
+         */
+        
+        void CCONV BaseInput::onDetachHandler( PhidgetHandle ph, void* ctx )
+        {
+            CI_LOG_V( "onDetachHandler" );
+            PhidgetReturnCode prc;
+            PhidgetHandle hub;
+            int serialNumber;
+            int hubPort;
+            int channel;
+            
+            prc = Phidget_getDeviceSerialNumber( ph, &serialNumber );
+            
+            if( EPHIDGET_OK != prc ) {
+                CI_LOG_E( "Runtime Error -> Get DeviceSerialNumber: \n\t" );
+                displayError( prc );
+                return;
+            }
+            
+            prc = Phidget_getChannel( ph, &channel );
+            
+            if( EPHIDGET_OK != prc ) {
+                CI_LOG_E( "Runtime Error -> Get Channel: \n\t" );
+                displayError( prc );
+                return;
+            }
+            
+            //Check if this is a VINT device
+            prc = Phidget_getHub( ph, &hub );
+            
+            if( EPHIDGET_WRONGDEVICE != prc ) {
+                prc = Phidget_getHubPort( ph, &hubPort );
+                
+                if( EPHIDGET_OK != prc ) {
+                    CI_LOG_E( "Runtime Error -> Get HubPort: \n\t" );
+                    displayError( prc );
+                    return;
+                }
+                
+                CI_LOG_V( "Detach Event:-> Serial Number: " << serialNumber << "\n\t-> Hub Port: " << hubPort << "\n\t-> Channel " << channel );
+            }
+            else {
+                CI_LOG_V( "Detach Event:-> Serial Number: " << serialNumber << "\n\t-> Channel " << channel );
+            }
+        }
+
+        /**
+         * Writes phidget error info to stderr.
+         * Fired when a Phidget channel with onErrorHandler registered encounters an error in the library
+         *
+         * @param ph The Phidget channel that fired the error event
+         * @param *ctx Context pointer
+         * @param errorCode the code associated with the error of enum type Phidget_ErrorEventCode
+         * @param *errorString string containing the description of the error fired
+         */
+        void BaseInput::onErrorHandler(PhidgetHandle ph, void *ctx, Phidget_ErrorEventCode errorCode, const char *errorString)
+        {
+            CI_LOG_E( "[Phidget Error Event] -> " << errorString << ", code:" << errorCode );
+        }
 	}
 }
