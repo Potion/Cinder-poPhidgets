@@ -22,7 +22,7 @@ namespace po
 				PhidgetDistanceSensorHandle mHandle;
 				int createSpecificInput() override;
 
-				void setChangeHandlers( PhidgetHandle ch ) override;
+				void setChangeHandlers() override;
 
 				//	event handlers
 				static void CCONV onDistanceChangeHandler( PhidgetDistanceSensorHandle ch, void* ctx, int distance );

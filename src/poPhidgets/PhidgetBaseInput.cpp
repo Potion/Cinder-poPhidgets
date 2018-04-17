@@ -7,7 +7,8 @@ namespace po
 	{
         
         //
-        //    set the desired properties of the input
+        //  set the desired properties of the input
+        //  Do this before creating and opening the channel
         //  Serial number: set to -1 to read from device
         //  Channel number
         //  Data interval: The frequency, in milliseconds, the device checks the value
@@ -29,41 +30,29 @@ namespace po
 			createSpecificInput();
 
 			if( setSerialNumber( getHandle(), mSerialNumber ) ) {
-				return;
+                CI_LOG_E("Error setting serial number");
 			}
 
 			if( setChannel( getHandle(), mChannel ) ) {
-				return;
+                CI_LOG_E("Error setting channel");
 			}
             
-            //  see if this is a hub port device
-            int isHubPort = 0;
-            PhidgetReturnCode prc = Phidget_getIsHubPortDevice(getHandle(), &isHubPort);
-            if( EPHIDGET_OK != prc ) {
-                CI_LOG_E( "Runtime Error -> Getting isHubPortDevice" );
-                displayError( prc );
-                return;
+            if (mHubPort != -1) {
+                if ( setHubPort(getHandle(), mHubPort) ) {
+                    CI_LOG_E("Error setting hub port");
+                }
             }
             
-            CI_LOG_V("IS this a hub port device? " << isHubPort);
-
-            if (isHubPort && mHubPort != -1) {
-                CI_LOG_V("We have an item here that's a hub port device");
-            } else {
-                CI_LOG_V("Problem with the hub port device");
-            }
-
 			if( setAttachDetachErrorHandlers( getHandle() ) ) {
-				return;
+                CI_LOG_E("Unable to set the attach, detach, and/or error handlers");
 			}
 
-			setChangeHandlers( getHandle() );
+			setChangeHandlers();
 
-
-			if( openPhidgetChannelWithTimeout( getHandle(), timeout ) ) {
+            if( openPhidgetChannelWithTimeout( getHandle(), timeout ) ) {
+                CI_LOG_E("Unable to create channel.");
 				return;
 			}
-
 		}
 
 
@@ -97,7 +86,7 @@ namespace po
 			return 0;
 		}
 
-        void BaseInput::setHubPort(PhidgetHandle ph, int hubPort)
+        int BaseInput::setHubPort(PhidgetHandle ph, int hubPort)
         {
             CI_LOG_V( "Setting Phidget hub port " << hubPort );
             PhidgetReturnCode prc;
@@ -106,7 +95,10 @@ namespace po
             if( EPHIDGET_OK != prc ) {
                 CI_LOG_E( "Runtime Error -> Setting HubPort" );
                 displayError( prc );
+                return 1;
             }
+            
+            return 0;
         }
         
         /**
@@ -214,7 +206,7 @@ namespace po
             int32_t channel;
             
             //    Find max and min data intervals
-            baseInputInstance->setDataIntervals( baseInputInstance->getDataInterval() );
+            baseInputInstance->setDataInterval( baseInputInstance->getDataInterval() );
             baseInputInstance->setChangeTrigger( baseInputInstance->getChangeTrigger() );
             prc = Phidget_getDeviceSerialNumber( ph, &serialNumber );
             CI_LOG_V( "Getting serial number: " << serialNumber );

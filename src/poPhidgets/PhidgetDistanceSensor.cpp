@@ -45,8 +45,7 @@ namespace po
 		}
 
 
-
-		void DistanceSensor::setChangeHandlers( PhidgetHandle ch )
+		void DistanceSensor::setChangeHandlers()
 		{
 			CI_LOG_V( "setChangeHandlers" );
 		}

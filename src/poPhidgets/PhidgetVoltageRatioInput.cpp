@@ -48,12 +48,96 @@ namespace po
 				return 0;
 			}
 		}
+        
+        /*
+         *    Set the DataInterval inside of the attach handler to initialize the device with this value.
+         *    DataInterval defines the minimum time between VoltageRatioChange events.
+         *    DataInterval can be set to any value from MinDataInterval to MaxDataInterval.
+         */
+        void VoltageRatioInput::setDataInterval(uint32_t interval) {
+            uint32_t minDataInterval;
+            uint32_t maxDataInterval;
+            PhidgetReturnCode prc;
+            
+            prc = PhidgetVoltageRatioInput_getMinDataInterval( mHandle, &minDataInterval );
+            if( EPHIDGET_OK != prc ) {
+                CI_LOG_E( "Runtime Error -> Getting min data interval" );
+                displayError( prc );
+                return;
+            }
+            
+            prc = PhidgetVoltageRatioInput_getMaxDataInterval( mHandle, &maxDataInterval );
+            if( EPHIDGET_OK != prc ) {
+                CI_LOG_E( "Runtime Error -> Getting max data interval" );
+                displayError( prc );
+                return;
+            }
+            
+            CI_LOG_D( "Max and min data intervals (in milliseconds)\t Max: " << maxDataInterval << ", min: " << minDataInterval );
+            
+            if( mDataInterval > maxDataInterval || mDataInterval < minDataInterval ) {
+                CI_LOG_W( "Setting data interval to value outside max and min limits." );
+            }
+            
+            //  Set the actual data interval
+            prc = PhidgetVoltageRatioInput_setDataInterval( mHandle, mDataInterval );
+            if( EPHIDGET_OK != prc ) {
+                CI_LOG_E( "Runtime Error -> Set DataInterval" );
+                displayError( prc );
+                return;
+            }
+        }
+        
+        /*
+         *    Set the VoltageRatioChangeTrigger inside of the attach handler to initialize the device with this value.
+         *    VoltageRatioChangeTrigger will affect the frequency of VoltageRatioChange events, by limiting them to only occur when
+         *    the ratio changes by at least the value set.
+         */
+        void VoltageRatioInput::setChangeTrigger(double trigger)
+        {
+            //  find min and max change trigger
+            double minChangeTrigger;
+            double maxChangeTrigger;
+            PhidgetReturnCode prc;
+            
+            prc = PhidgetVoltageRatioInput_getMinVoltageRatioChangeTrigger( mHandle, &minChangeTrigger );
+            
+            if( EPHIDGET_OK != prc ) {
+                CI_LOG_E( "Runtime Error -> Getting min change trigger" );
+                displayError( prc );
+                return;
+            }
+            
+            prc = PhidgetVoltageRatioInput_getMaxVoltageRatioChangeTrigger( mHandle, &maxChangeTrigger );
+            
+            if( EPHIDGET_OK != prc ) {
+                CI_LOG_E( "Runtime Error -> Getting max change trigger" );
+                displayError( prc );
+                return;
+            }
+            
+            CI_LOG_D( "Max and min voltage ratio change triggers\t Max: " << maxChangeTrigger << ", min: " << minChangeTrigger );
+            CI_LOG_V( "Setting change trigger to " << mChangeTrigger );
+            
+            if( mChangeTrigger > maxChangeTrigger || mChangeTrigger < minChangeTrigger ) {
+                CI_LOG_W( "Setting change trigger to value outside the max and min limits." );
+            }
+            
+            prc = PhidgetVoltageRatioInput_setVoltageRatioChangeTrigger( mHandle, mChangeTrigger );
+            
+            if( EPHIDGET_OK != prc ) {
+                CI_LOG_E( "Runtime Error -> Set VoltageRatioChangeTrigger: \n\t" );
+                displayError( prc );
+                return;
+            }
+        }
+
 
 		//
 		//	Called by base function;
 		//	adds handler for voltage ratio change
 		//
-		void VoltageRatioInput::setChangeHandlers( PhidgetHandle ph )
+		void VoltageRatioInput::setChangeHandlers()
 		{
 			if( setVoltageRatioHandler( mHandle, onVoltageRatioChangeHandler ) ) {
                 CI_LOG_E("Unable to set Voltage Ratio Change Handler");
@@ -154,89 +238,6 @@ namespace po
 			return 0;
 		}
 
-
-        /*
-         *    Set the DataInterval inside of the attach handler to initialize the device with this value.
-         *    DataInterval defines the minimum time between VoltageRatioChange events.
-         *    DataInterval can be set to any value from MinDataInterval to MaxDataInterval.
-         */
-        void VoltageRatioInput::setDataIntervals(uint32_t interval) {
-            uint32_t minDataInterval;
-            uint32_t maxDataInterval;
-            PhidgetReturnCode prc;
-            
-            prc = PhidgetVoltageRatioInput_getMinDataInterval( mHandle, &minDataInterval );
-            if( EPHIDGET_OK != prc ) {
-                CI_LOG_E( "Runtime Error -> Getting min data interval" );
-                displayError( prc );
-                return;
-            }
-            
-            prc = PhidgetVoltageRatioInput_getMaxDataInterval( mHandle, &maxDataInterval );
-            if( EPHIDGET_OK != prc ) {
-                CI_LOG_E( "Runtime Error -> Getting max data interval" );
-                displayError( prc );
-                return;
-            }
-            
-            CI_LOG_D( "Max and min data intervals (in milliseconds)\t Max: " << maxDataInterval << ", min: " << minDataInterval );
-            
-            if( mDataInterval > maxDataInterval || mDataInterval < minDataInterval ) {
-                CI_LOG_W( "Setting data interval to value outside max and min limits." );
-            }
-            
-            //  Set the actual data interval
-            prc = PhidgetVoltageRatioInput_setDataInterval( mHandle, mDataInterval );
-            if( EPHIDGET_OK != prc ) {
-                CI_LOG_E( "Runtime Error -> Set DataInterval" );
-                displayError( prc );
-                return;
-            }
-        }
-        
-        /*
-         *    Set the VoltageRatioChangeTrigger inside of the attach handler to initialize the device with this value.
-         *    VoltageRatioChangeTrigger will affect the frequency of VoltageRatioChange events, by limiting them to only occur when
-         *    the ratio changes by at least the value set.
-         */
-        void VoltageRatioInput::setChangeTrigger(double trigger)
-        {
-            //  find min and max change trigger
-            double minChangeTrigger;
-            double maxChangeTrigger;
-            PhidgetReturnCode prc;
-            
-            prc = PhidgetVoltageRatioInput_getMinVoltageRatioChangeTrigger( mHandle, &minChangeTrigger );
-            
-            if( EPHIDGET_OK != prc ) {
-                CI_LOG_E( "Runtime Error -> Getting min change trigger" );
-                displayError( prc );
-                return;
-            }
-            
-            prc = PhidgetVoltageRatioInput_getMaxVoltageRatioChangeTrigger( mHandle, &maxChangeTrigger );
-            
-            if( EPHIDGET_OK != prc ) {
-                CI_LOG_E( "Runtime Error -> Getting max change trigger" );
-                displayError( prc );
-                return;
-            }
-            
-            CI_LOG_D( "Max and min voltage ratio change triggers\t Max: " << maxChangeTrigger << ", min: " << minChangeTrigger );
-            CI_LOG_V( "Setting change trigger to " << mChangeTrigger );
-            
-            if( mChangeTrigger > maxChangeTrigger || mChangeTrigger < minChangeTrigger ) {
-                CI_LOG_W( "Setting change trigger to value outside the max and min limits." );
-            }
-            
-            prc = PhidgetVoltageRatioInput_setVoltageRatioChangeTrigger( mHandle, mChangeTrigger );
-            
-            if( EPHIDGET_OK != prc ) {
-                CI_LOG_E( "Runtime Error -> Set VoltageRatioChangeTrigger: \n\t" );
-                displayError( prc );
-                return;
-            }
-        }
 
 		/**
 		* Outputs the VoltageRatioInput's most recently reported ratio.

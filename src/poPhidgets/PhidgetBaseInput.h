@@ -19,15 +19,15 @@ namespace po
 			: public std::enable_shared_from_this<BaseInput>
 		{
 			public:
+                virtual void setProperties( int serialNum, int channelNum, uint32_t dataInterval, double changeTrigger, int hubPort = -1 );
 				void createAndOpenChannel( int timeout = 5000 );
 				int closePhidgetChannel( PhidgetHandle ch );
 				virtual PhidgetHandle getHandle() = 0;
-                virtual void setProperties( int serialNum, int channelNum, uint32_t dataInterval, double changeTrigger, int hubPort = -1 );
 
                 //  methods to be overwritten in specific input classes
-                virtual void setDataIntervals( uint32_t interval ){};
+                virtual void setDataInterval( uint32_t interval ){};
                 uint32_t getDataInterval(){ return mDataInterval; };
-                virtual void setChangeTrigger(double trigger){};
+                virtual void setChangeTrigger( double trigger ){};
                 double getChangeTrigger() { return mChangeTrigger; };
             
 			protected:
@@ -38,15 +38,14 @@ namespace po
                 double mChangeTrigger;
                 int mHubPort;
 
-				int setSerialNumber( PhidgetHandle ph, int deviceSerialNumber = -1 );
-				int setChannel( PhidgetHandle ph, int channel = 0 );
-                void setHubPort( PhidgetHandle ph, int hubPort );
-
                 //  Input must create itself as its specific type
-				virtual int createSpecificInput() = 0;
+                virtual int createSpecificInput() = 0;
+                int setSerialNumber( PhidgetHandle ph, int deviceSerialNumber = -1 );
+				int setChannel( PhidgetHandle ph, int channel = 0 );
+                int setHubPort( PhidgetHandle ph, int hubPort );
 
 				int setAttachDetachErrorHandlers( PhidgetHandle ph );
-				virtual void setChangeHandlers( PhidgetHandle ph ) {};
+				virtual void setChangeHandlers() {};
 				int openPhidgetChannelWithTimeout( PhidgetHandle ch, int timeout = 5000 );
             
 
