@@ -14,7 +14,7 @@ namespace po
 			public:
 				static DistanceSensorRef create();
 
-				virtual PhidgetHandle getHandle() override { return PhidgetHandle( mHandle ); };
+				PhidgetHandle getHandle() override { return PhidgetHandle( mHandle ); };
 				~DistanceSensor();
 
 			protected:
@@ -27,9 +27,11 @@ namespace po
 				PhidgetDistanceSensorHandle mHandle = NULL;
 
 				void setChangeHandlers() override;
+                int setDistanceChangeHandler();
+                int setSonarReflectionsUpdateHandler();
 
 				//	event handlers
-				static void CCONV onDistanceChangeHandler( PhidgetDistanceSensorHandle ch, void* ctx, int distance );
+				static void CCONV onDistanceChangeHandler( PhidgetDistanceSensorHandle ch, void* ctx, uint32_t distance );
 				static void CCONV onSonarReflectionsUpdateHandler( PhidgetDistanceSensorHandle ch, void* ctx, const uint32_t distances[8], const uint32_t amplitudes[8], uint32_t count );
 
 		};

@@ -92,7 +92,6 @@ namespace po
          */
 		int VoltageRatioInput::createSpecificInput()
 		{
-
             PhidgetReturnCode prc;
             prc = PhidgetVoltageRatioInput_create( &mHandle );
             

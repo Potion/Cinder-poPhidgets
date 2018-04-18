@@ -209,7 +209,7 @@ namespace po
             
             //  Set data intervals
             baseInputInstance->setDataInterval( baseInputInstance->getDataInterval() );
-            //  Set change trigger (type will depend on input)
+            //  Set change trigger (type will depend on type of input)
             baseInputInstance->setChangeTrigger( baseInputInstance->getChangeTrigger() );
             baseInputInstance->setChangeTriggerUInt32( baseInputInstance->getChangeTriggerUInt32() );
             prc = Phidget_getDeviceSerialNumber( ph, &serialNumber );

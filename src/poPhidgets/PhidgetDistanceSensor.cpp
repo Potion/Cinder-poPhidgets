@@ -121,9 +121,43 @@ namespace po
 		void DistanceSensor::setChangeHandlers()
 		{
 			CI_LOG_V( "setChangeHandlers" );
+            PhidgetReturnCode prc;
+            if (setDistanceChangeHandler()) {
+                CI_LOG_E("Unable to set Distance Change Handler");
+            }
+            
+            if (setSonarReflectionsUpdateHandler() ) {
+                CI_LOG_E("Unable to set Sonar Reflections Update Handler");
+            }
 		}
+        
+        int DistanceSensor::setDistanceChangeHandler()
+        {
+            PhidgetReturnCode prc;
 
-		void CCONV DistanceSensor::onDistanceChangeHandler( PhidgetDistanceSensorHandle ch, void* ctx, int distance )
+            prc = PhidgetDistanceSensor_setOnDistanceChangeHandler(mHandle, onDistanceChangeHandler, this);
+            if( EPHIDGET_OK != prc ) {
+                CI_LOG_E( "Runtime Error -> Setting onDistanceChangeHandler" );
+                displayError( prc );
+                return 1;
+            }
+            return 0;
+        }
+        
+        int DistanceSensor::setSonarReflectionsUpdateHandler()
+        {
+            PhidgetReturnCode prc;
+            
+            prc = PhidgetDistanceSensor_setOnSonarReflectionsUpdateHandler(mHandle, onSonarReflectionsUpdateHandler, this);
+            if( EPHIDGET_OK != prc ) {
+                CI_LOG_E( "Runtime Error -> Setting onSonarReflectionsUpdateHandler" );
+                displayError( prc );
+                return 1;
+            }
+            return 0;
+        }
+
+		void CCONV DistanceSensor::onDistanceChangeHandler( PhidgetDistanceSensorHandle ch, void* ctx, uint32_t distance )
 		{
             CI_LOG_V( "onDistanceChangeHandler: distance: " << distance );
 		}
