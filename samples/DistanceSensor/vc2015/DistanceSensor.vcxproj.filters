@@ -12,6 +12,21 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
+    <Filter Include="Blocks">
+      <UniqueIdentifier>{87775ce6-f549-4b38-a32f-43432f272b10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Blocks\Cinder-poPhidgets">
+      <UniqueIdentifier>{340cad28-27d0-4fd2-aa7a-c3ab934f3088}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Blocks\Cinder-poPhidgets\include">
+      <UniqueIdentifier>{fd86ae40-812f-4b57-87fe-f8001f798f93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Blocks\Cinder-poPhidgets\src">
+      <UniqueIdentifier>{321bf1ce-b211-4724-a806-19da56b4e568}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Blocks\Cinder-poPhidgets\src\poPhidgets">
+      <UniqueIdentifier>{53ce80aa-b152-431d-803a-834e81a14c7b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\DistanceSensorApp.cpp">
@@ -23,10 +38,31 @@
     <ClInclude Include="..\include\Resources.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\..\src\poPhidgets\PhidgetBaseInput.cpp">
+      <Filter>Blocks\Cinder-poPhidgets\src\poPhidgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\poPhidgets\PhidgetDistanceSensor.cpp">
+      <Filter>Blocks\Cinder-poPhidgets\src\poPhidgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\poPhidgets\PhidgetVoltageRatioInput.cpp">
+      <Filter>Blocks\Cinder-poPhidgets\src\poPhidgets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\phidget22.h">
+      <Filter>Blocks\Cinder-poPhidgets\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\poPhidgets\PhidgetBaseInput.h">
+      <Filter>Blocks\Cinder-poPhidgets\src\poPhidgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\poPhidgets\PhidgetDistanceSensor.h">
+      <Filter>Blocks\Cinder-poPhidgets\src\poPhidgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\poPhidgets\PhidgetVoltageRatioInput.h">
+      <Filter>Blocks\Cinder-poPhidgets\src\poPhidgets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
